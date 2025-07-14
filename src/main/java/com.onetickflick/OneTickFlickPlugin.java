@@ -1,0 +1,148 @@
+package com.onetickflick;
+
+import com.google.inject.Provides;
+
+import javax.inject.Inject;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import net.runelite.api.MenuAction;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+@PluginDescriptor(
+		name = "1 Tick Flick",
+		description = "Visual tick bar and combo counter for 1-tick prayer flicking with the quick prayer orb",
+		tags = {"1", "tick", "flick", "prayer", "metronome", "visual", "orb"}
+)
+public class OneTickFlickPlugin extends Plugin
+{
+	private static final int TICK_LENGTH = 600;
+
+	@Inject
+	private OverlayManager overlayManager;
+	@Inject
+	private OneTickFlickOverlay overlay;
+	@Inject
+	private OneTickFlickConfig config;
+
+	private long lastTickTime;
+	private long lastInteraction;
+	private final List<Integer> clickOffsets = new CopyOnWriteArrayList<>(); // A list of times the quick prayer orb was clicked, in milliseconds since the last tick.
+
+	@Getter(AccessLevel.PACKAGE)
+	private int combo;
+
+	@Override
+	protected void startUp()
+	{
+		lastTickTime = System.currentTimeMillis();
+		lastInteraction = lastTickTime;
+		combo = 0;
+
+		overlay.setVisible(true);
+		overlayManager.add(overlay);
+	}
+
+	@Override
+	protected void shutDown()
+	{
+		overlayManager.remove(overlay);
+		clickOffsets.clear();
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick tick)
+	{
+		if (clickOffsets.size() == 2 && clickOffsets.stream().allMatch(this::inGreenZone)) {
+			combo++;
+		}
+		else {
+			combo = 0;
+		}
+
+		clickOffsets.clear();
+		overlay.newTick();
+		lastTickTime = System.currentTimeMillis();
+
+		if (config.enableTimeout() && overlay.isVisible())
+		{
+			long elapsed = System.currentTimeMillis() - lastInteraction;
+			if (elapsed > config.overlayTimeoutSeconds() * 1000L)
+			{
+				overlay.setVisible(false);
+			}
+		}
+		else
+		{
+			if (!config.enableTimeout() && !overlay.isVisible())
+			{
+				overlay.setVisible(true);
+			}
+		}
+	}
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked e)
+	{
+		if (e.getWidgetId() != WidgetInfo.MINIMAP_QUICK_PRAYER_ORB.getId())
+		{
+			return;
+		}
+
+		if (e.getMenuAction() != MenuAction.CC_OP && e.getMenuAction() != MenuAction.CC_OP_LOW_PRIORITY)
+		{
+			return;
+		}
+
+		int offset = (int) (System.currentTimeMillis() - lastTickTime);
+
+		// Just in case, we don't want to record clicks that are into the next tick
+		if (offset < TICK_LENGTH)
+		{
+			clickOffsets.add(offset);
+			overlay.recordClick(offset);
+		}
+
+		lastInteraction = System.currentTimeMillis();
+		if (!overlay.isVisible())
+		{
+			// No matter what the overlay timeout options are, we want to show the overlay when the player clicks the quick prayer orb
+			overlay.setVisible(true);
+		}
+	}
+
+	/**
+	 * Returns the number of milliseconds since the last tick.
+	 */
+	long millisSinceTick()
+	{
+		return System.currentTimeMillis() - lastTickTime;
+	}
+
+	/**
+	 * Checks if the given milliseconds are within the green zone defined by the config.
+	 *
+	 * @param ms
+	 * @return
+	 */
+	private boolean inGreenZone(int ms)
+	{
+		return ms >= config.greenStart() && ms <= config.greenEnd();
+	}
+
+	@Provides
+	OneTickFlickConfig provideConfig(ConfigManager cm)
+	{
+		return cm.getConfig(OneTickFlickConfig.class);
+	}
+}
