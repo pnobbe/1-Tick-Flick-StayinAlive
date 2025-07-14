@@ -14,8 +14,8 @@ public class OneTickFlickOverlay extends Overlay
 	private static final int TEXT_SPACE = 20;
 	private static final int X_SIZE = 4;
 	private static final int TICK_LENGTH = 600;
-	private static final Dimension MIN_SIZE = new Dimension(150, MIN_BAR_HEIGHT + TEXT_SPACE);
-	private static final Dimension DEFAULT_SIZE = new Dimension(300, MIN_BAR_HEIGHT + TEXT_SPACE);
+	private static final Dimension MIN_SIZE = new Dimension(70, MIN_BAR_HEIGHT + TEXT_SPACE);
+	private static final Dimension DEFAULT_SIZE = new Dimension(150, MIN_BAR_HEIGHT + TEXT_SPACE);
 
 	private final OneTickFlickPlugin plugin;
 	private final OneTickFlickConfig config;
@@ -85,13 +85,11 @@ public class OneTickFlickOverlay extends Overlay
 		long ms = plugin.millisSinceTick();
 		int barX = (int) (width * ms / (double) TICK_LENGTH);
 
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		g.drawLine(barX, 0, barX, barHeight);
 
-		g.setColor(Color.BLACK);
 		g.drawRect(0, 0, width, barHeight);
 
-		g.setColor(Color.WHITE);
 		int y1 = barHeight / 2 - X_SIZE;
 		int y2 = barHeight / 2 + X_SIZE;
 		for (int offset : clickOffsets)
@@ -103,6 +101,7 @@ public class OneTickFlickOverlay extends Overlay
 
 		if (config.showCombo())
 		{
+			g.setColor(Color.WHITE);
 			String text = "Combo: " + plugin.getCombo();
 			int tx = (width - g.getFontMetrics().stringWidth(text)) / 2;
 			int ty = barHeight + g.getFontMetrics().getAscent() + 2;
