@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @PluginDescriptor(
 		name = "1 Tick Flick",
 		description = "Visual tick bar and combo counter for 1-tick prayer flicking with the quick prayer orb",
-		tags = {"1", "tick", "flick", "prayer", "metronome", "visual", "orb"}
+		tags = {"1", "one", "tick", "flick", "prayer", "metronome", "visual", "quick", "orb"}
 )
 public class OneTickFlickPlugin extends Plugin
 {
