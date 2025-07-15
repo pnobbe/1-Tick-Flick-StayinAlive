@@ -14,7 +14,7 @@ public class OneTickFlickOverlay extends Overlay
 	private static final int TEXT_SPACE = 20;
 	private static final int X_SIZE = 4;
 	private static final int TICK_LENGTH = 600;
-	private static final Dimension MIN_SIZE = new Dimension(70, MIN_BAR_HEIGHT + TEXT_SPACE);
+	private static final Dimension MIN_SIZE = new Dimension(50, MIN_BAR_HEIGHT + TEXT_SPACE);
 	private static final Dimension DEFAULT_SIZE = new Dimension(150, MIN_BAR_HEIGHT + TEXT_SPACE);
 
 	private final OneTickFlickPlugin plugin;
