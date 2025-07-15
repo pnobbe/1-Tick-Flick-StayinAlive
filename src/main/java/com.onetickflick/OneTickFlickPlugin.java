@@ -9,7 +9,8 @@ import lombok.Getter;
 import net.runelite.api.MenuAction;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
-import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -94,7 +95,8 @@ public class OneTickFlickPlugin extends Plugin
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked e)
 	{
-		if (e.getWidgetId() != WidgetInfo.MINIMAP_QUICK_PRAYER_ORB.getId())
+		Widget widget = e.getWidget();
+		if (widget == null || widget.getId() != InterfaceID.Orbs.PRAYERBUTTON)
 		{
 			return;
 		}
