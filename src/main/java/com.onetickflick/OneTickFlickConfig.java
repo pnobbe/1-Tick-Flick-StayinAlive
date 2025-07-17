@@ -62,4 +62,16 @@ public interface OneTickFlickConfig extends Config
 	{
 		return 30;
 	}
+
+	@Units(Units.MILLISECONDS)
+	@ConfigItem(
+			keyName = "clickDelayMilliseconds",
+			name = "Click delay - latency",
+			position = 5,
+			description = "Add a delay to your clicks to account for latency (ping).")
+	@Range(min = 0, max = 500)
+	default int clickDelayMilliseconds()
+	{
+		return 0;
+	}
 }
