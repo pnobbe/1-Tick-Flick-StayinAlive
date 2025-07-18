@@ -18,3 +18,4 @@ If you don't care about this, you can set the start to 0ms and the end to 600ms.
 - Enable/disable the combo counter
 - Set a timeout for the overlay to hide after a certain amount of time
 - Set a click delay to account for latency or server delay
+- Recolor all the overlay elements

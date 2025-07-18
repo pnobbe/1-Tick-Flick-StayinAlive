@@ -73,23 +73,25 @@ public class OneTickFlickOverlay extends Overlay
 
 		int barHeight = Math.max(MIN_BAR_HEIGHT, height - TEXT_SPACE);
 
-		g.setColor(Color.RED);
+		g.setColor(config.backgroundColor());
 		g.fillRect(0, 0, width, barHeight);
 
 		int greenX1 = width * config.greenStart() / TICK_LENGTH;
 		int greenX2 = width * config.greenEnd() / TICK_LENGTH;
 
-		g.setColor(Color.GREEN);
+		g.setColor(config.targetZoneColor());
 		g.fillRect(greenX1, 0, greenX2 - greenX1, barHeight);
 
 		long ms = plugin.millisSinceTick();
 		int barX = (int) (width * ms / (double) TICK_LENGTH);
 
-		g.setColor(Color.BLACK);
+		g.setColor(config.swipeLineColor());
 		g.drawLine(barX, 0, barX, barHeight);
 
+		g.setColor(config.borderColor());
 		g.drawRect(0, 0, width, barHeight);
 
+		g.setColor(config.clickColor());
 		int y1 = barHeight / 2 - X_SIZE;
 		int y2 = barHeight / 2 + X_SIZE;
 		for (int offset : clickOffsets)
@@ -101,7 +103,7 @@ public class OneTickFlickOverlay extends Overlay
 
 		if (config.showCombo())
 		{
-			g.setColor(Color.WHITE);
+			g.setColor(config.comboTextColor());
 			String text = "Combo: " + plugin.getCombo();
 			int tx = (width - g.getFontMetrics().stringWidth(text)) / 2;
 			int ty = barHeight + g.getFontMetrics().getAscent() + 2;

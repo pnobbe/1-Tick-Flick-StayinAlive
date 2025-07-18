@@ -2,14 +2,16 @@ package com.onetickflick;
 
 import net.runelite.client.config.*;
 
+import java.awt.*;
+
 @ConfigGroup("onetickflick")
 public interface OneTickFlickConfig extends Config
 {
 	@Units(Units.MILLISECONDS)
 	@ConfigItem(
 			keyName = "greenStart",
-			name = "Green start",
-			description = "How long into the tick the green bar starts. Used as a visual aid and to determine the combo counter.",
+			name = "Target zone start",
+			description = "How long into the tick the target zone starts. Used as a visual aid and to determine the combo counter.",
 			position = 0
 	)
 	@Range(min = 0, max = 600)
@@ -21,8 +23,8 @@ public interface OneTickFlickConfig extends Config
 	@Units(Units.MILLISECONDS)
 	@ConfigItem(
 			keyName = "greenEnd",
-			name = "Green end",
-			description = "How long into the tick the green bar ends. Used as a visual aid and to determine the combo counter.",
+			name = "Target zone end",
+			description = "How long into the tick the target zone ends. Used as a visual aid and to determine the combo counter.",
 			position = 1
 	)
 	@Range(min = 0, max = 600)
@@ -35,7 +37,7 @@ public interface OneTickFlickConfig extends Config
 			keyName = "showCombo",
 			name = "Show combo counter",
 			position = 2,
-			description = "Whether to show the combo counter in the overlay. Combo counter is the number of consecutive double clicks within the green bar.")
+			description = "Whether to show the combo counter in the overlay. Combo counter is the number of consecutive double clicks within the target zone.")
 	default boolean showCombo()
 	{
 		return true;
@@ -73,5 +75,84 @@ public interface OneTickFlickConfig extends Config
 	default int clickDelayMilliseconds()
 	{
 		return 0;
+	}
+
+	@ConfigSection(
+			position = 6,
+			name = "Colors",
+			description = "Recolor the various elements of the overlay"
+	)
+	String colorSection = "colorSection";
+
+	@ConfigItem(
+			keyName = "targetZoneColor",
+			name = "Target zone color",
+			description = "Color of the target zone in the overlay",
+			section = colorSection,
+			position = 0
+	)
+	default Color targetZoneColor()
+	{
+		return new Color(0, 255, 0);
+	}
+
+	@ConfigItem(
+			keyName = "backgroundColor",
+			name = "Background color",
+			description = "Color of the background bar in the overlay",
+			section = colorSection,
+			position = 1
+	)
+	default Color backgroundColor()
+	{
+		return new Color(255, 0, 0);
+	}
+
+	@ConfigItem(
+			keyName = "clickColor",
+			name = "X click color",
+			description = "Color of the Xs in the overlay that indicate when you clicked",
+			section = colorSection,
+			position = 2
+	)
+	default Color clickColor()
+	{
+		return new Color(0, 0, 0);
+	}
+
+	@ConfigItem(
+			keyName = "swipeLineColor",
+			name = "Swipe line color",
+			description = "Color of the vertical line that swipes left to right each tick",
+			section = colorSection,
+			position = 3
+	)
+	default Color swipeLineColor()
+	{
+		return new Color(0, 0, 0);
+	}
+
+	@ConfigItem(
+			keyName = "borderColor",
+			name = "Border color",
+			description = "Color of the border around the overlay",
+			section = colorSection,
+			position = 4
+	)
+	default Color borderColor()
+	{
+		return new Color(0, 0, 0);
+	}
+
+	@ConfigItem(
+			keyName = "comboTextColor",
+			name = "Combo text color",
+			description = "Color of the combo counter text in the overlay",
+			section = colorSection,
+			position = 5
+	)
+	default Color comboTextColor()
+	{
+		return new Color(255, 215, 255);
 	}
 }
