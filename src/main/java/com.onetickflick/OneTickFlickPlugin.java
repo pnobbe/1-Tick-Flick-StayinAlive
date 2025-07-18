@@ -13,6 +13,7 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -61,6 +62,46 @@ public class OneTickFlickPlugin extends Plugin
 		overlayManager.remove(overlay);
 		currentTickClicks.clear();
 		nextTickClicks.clear();
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (!event.getGroup().equals("onetickflick"))
+		{
+			return;
+		}
+
+		switch (event.getKey())
+		{
+			case "greenStart":
+				overlay.setGreenStart(config.greenStart());
+				break;
+			case "greenEnd":
+				overlay.setGreenEnd(config.greenEnd());
+				break;
+			case "showCombo":
+				overlay.setShowCombo(config.showCombo());
+				break;
+			case "targetZoneColor":
+				overlay.setTargetZoneColor(config.targetZoneColor());
+				break;
+			case "backgroundColor":
+				overlay.setBackgroundColor(config.backgroundColor());
+				break;
+			case "clickColor":
+				overlay.setClickColor(config.clickColor());
+				break;
+			case "swipeLineColor":
+				overlay.setSwipeLineColor(config.swipeLineColor());
+				break;
+			case "borderColor":
+				overlay.setBorderColor(config.borderColor());
+				break;
+			case "comboTextColor":
+				overlay.setComboTextColor(config.comboTextColor());
+				break;
+		}
 	}
 
 	@Subscribe
@@ -169,6 +210,7 @@ public class OneTickFlickPlugin extends Plugin
 
 	/**
 	 * Checks if the given widget ID is a prayer book widget.
+	 *
 	 * @param widgetId
 	 * @return
 	 */
