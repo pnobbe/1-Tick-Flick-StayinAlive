@@ -14,6 +14,7 @@ No, the green bar is just an adjustable target zone to help practice more precis
 If you don't care about this, you can set the start to 0ms and the end to 600ms.
 
 ## Config Options
+- Enable/disable detection of prayer book clicks
 - Set the green bar start and end to adjust the target zone
 - Enable/disable the combo counter
 - Set a timeout for the overlay to hide after a certain amount of time

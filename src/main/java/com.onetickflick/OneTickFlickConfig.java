@@ -7,12 +7,22 @@ import java.awt.*;
 @ConfigGroup("onetickflick")
 public interface OneTickFlickConfig extends Config
 {
+	@ConfigItem(
+			keyName = "detectPrayerBookClicks",
+			name = "Detect prayer book clicks",
+			position = 0,
+			description = "Whether the overlay should also detect clicks on the prayer book.")
+	default boolean detectPrayerBookClicks()
+	{
+		return true;
+	}
+
 	@Units(Units.MILLISECONDS)
 	@ConfigItem(
 			keyName = "greenStart",
 			name = "Target zone start",
 			description = "How long into the tick the target zone starts. Used as a visual aid and to determine the combo counter.",
-			position = 0
+			position = 1
 	)
 	@Range(min = 0, max = 600)
 	default int greenStart()
@@ -25,7 +35,7 @@ public interface OneTickFlickConfig extends Config
 			keyName = "greenEnd",
 			name = "Target zone end",
 			description = "How long into the tick the target zone ends. Used as a visual aid and to determine the combo counter.",
-			position = 1
+			position = 2
 	)
 	@Range(min = 0, max = 600)
 	default int greenEnd()
@@ -36,7 +46,7 @@ public interface OneTickFlickConfig extends Config
 	@ConfigItem(
 			keyName = "showCombo",
 			name = "Show combo counter",
-			position = 2,
+			position = 3,
 			description = "Whether to show the combo counter in the overlay. Combo counter is the number of consecutive double clicks within the target zone.")
 	default boolean showCombo()
 	{
@@ -46,7 +56,7 @@ public interface OneTickFlickConfig extends Config
 	@ConfigItem(
 			keyName = "enableTimeout",
 			name = "Enable overlay timeout",
-			position = 3,
+			position = 4,
 			description = "Whether the overlay should automatically hide after a period without clicking the quick prayer orb.")
 	default boolean enableTimeout()
 	{
@@ -57,7 +67,7 @@ public interface OneTickFlickConfig extends Config
 	@ConfigItem(
 			keyName = "overlayTimeoutSeconds",
 			name = "Overlay timeout",
-			position = 4,
+			position = 5,
 			description = "How long after last clicking the quick prayer orb the overlay should remain visible")
 	@Range(min = 1, max = 600)
 	default int overlayTimeoutSeconds()
@@ -69,7 +79,7 @@ public interface OneTickFlickConfig extends Config
 	@ConfigItem(
 			keyName = "clickDelayMilliseconds",
 			name = "Click delay - latency",
-			position = 5,
+			position = 6,
 			description = "Add a delay to your clicks to account for latency (ping).")
 	@Range(min = 0, max = 500)
 	default int clickDelayMilliseconds()
@@ -78,7 +88,7 @@ public interface OneTickFlickConfig extends Config
 	}
 
 	@ConfigSection(
-			position = 6,
+			position = 7,
 			name = "Colors",
 			description = "Recolor the various elements of the overlay"
 	)

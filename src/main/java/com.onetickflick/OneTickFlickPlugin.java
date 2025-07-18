@@ -107,7 +107,10 @@ public class OneTickFlickPlugin extends Plugin
 	public void onMenuOptionClicked(MenuOptionClicked e)
 	{
 		Widget widget = e.getWidget();
-		if (widget == null || widget.getId() != InterfaceID.Orbs.PRAYERBUTTON)
+
+		if (widget == null
+				|| (widget.getId() != InterfaceID.Orbs.PRAYERBUTTON
+				&& !(config.detectPrayerBookClicks() && isPrayerBookWidget(widget.getId()))))
 		{
 			return;
 		}
@@ -162,5 +165,15 @@ public class OneTickFlickPlugin extends Plugin
 	OneTickFlickConfig provideConfig(ConfigManager cm)
 	{
 		return cm.getConfig(OneTickFlickConfig.class);
+	}
+
+	/**
+	 * Checks if the given widget ID is a prayer book widget.
+	 * @param widgetId
+	 * @return
+	 */
+	private static boolean isPrayerBookWidget(int widgetId)
+	{
+		return widgetId >= InterfaceID.Prayerbook.PRAYER1 && widgetId <= InterfaceID.Prayerbook.PRAYER30;
 	}
 }
