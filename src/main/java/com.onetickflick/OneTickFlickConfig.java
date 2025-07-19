@@ -27,7 +27,7 @@ public interface OneTickFlickConfig extends Config
 	@Range(min = 0, max = 600)
 	default int greenStart()
 	{
-		return 100;
+		return 0;
 	}
 
 	@Units(Units.MILLISECONDS)
