@@ -163,6 +163,6 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color comboTextColor()
 	{
-		return new Color(255, 215, 255);
+		return new Color(255, 255, 255);
 	}
 }
