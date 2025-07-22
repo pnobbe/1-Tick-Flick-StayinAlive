@@ -102,11 +102,12 @@ public class OneTickFlickOverlay extends Overlay
 
 		int barHeight = Math.max(MIN_BAR_HEIGHT, height - TEXT_SPACE);
 
-		g.setColor(backgroundColor);
-		g.fillRect(0, 0, width, barHeight);
-
 		int greenX1 = width * greenStart / TICK_LENGTH;
 		int greenX2 = width * greenEnd / TICK_LENGTH;
+
+		g.setColor(backgroundColor);
+		g.fillRect(0, 0, greenX1, barHeight);
+		g.fillRect(greenX2, 0, width - greenX2, barHeight);
 
 		g.setColor(targetZoneColor);
 		g.fillRect(greenX1, 0, greenX2 - greenX1, barHeight);

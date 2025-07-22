@@ -94,6 +94,7 @@ public interface OneTickFlickConfig extends Config
 	)
 	String colorSection = "colorSection";
 
+	@Alpha
 	@ConfigItem(
 			keyName = "targetZoneColor",
 			name = "Target zone color",
@@ -103,9 +104,10 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color targetZoneColor()
 	{
-		return new Color(0, 255, 0);
+		return new Color(0, 255, 0, 255);
 	}
 
+	@Alpha
 	@ConfigItem(
 			keyName = "backgroundColor",
 			name = "Background color",
@@ -115,9 +117,10 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color backgroundColor()
 	{
-		return new Color(255, 0, 0);
+		return new Color(255, 0, 0, 255);
 	}
 
+	@Alpha
 	@ConfigItem(
 			keyName = "clickColor",
 			name = "X click color",
@@ -127,9 +130,10 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color clickColor()
 	{
-		return new Color(0, 0, 0);
+		return new Color(0, 0, 0, 255);
 	}
 
+	@Alpha
 	@ConfigItem(
 			keyName = "swipeLineColor",
 			name = "Swipe line color",
@@ -139,9 +143,10 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color swipeLineColor()
 	{
-		return new Color(0, 0, 0);
+		return new Color(0, 0, 0, 255);
 	}
 
+	@Alpha
 	@ConfigItem(
 			keyName = "borderColor",
 			name = "Border color",
@@ -151,9 +156,10 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color borderColor()
 	{
-		return new Color(0, 0, 0);
+		return new Color(0, 0, 0, 255);
 	}
 
+	@Alpha
 	@ConfigItem(
 			keyName = "comboTextColor",
 			name = "Combo text color",
@@ -163,6 +169,6 @@ public interface OneTickFlickConfig extends Config
 	)
 	default Color comboTextColor()
 	{
-		return new Color(255, 255, 255);
+		return new Color(255, 255, 255, 255);
 	}
 }
