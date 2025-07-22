@@ -8,10 +8,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
-import net.runelite.api.Prayer;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -42,7 +42,6 @@ public class OneTickFlickPlugin extends Plugin
 
 	private long lastTickTime;
 	private long lastInteraction;
-	private boolean prayerActive;
 	private final List<Integer> currentTickClicks = new CopyOnWriteArrayList<>(); // A list of times the quick prayer orb was clicked, in milliseconds since the last onGameTick.
 	private final List<Integer> nextTickClicks = new CopyOnWriteArrayList<>(); // Only used if the click delay config option causes the click to fall into the next tick.
 
@@ -108,18 +107,6 @@ public class OneTickFlickPlugin extends Plugin
 		}
 	}
 
-	private boolean isAnyPrayerActive()
-	{
-		for (Prayer prayer : Prayer.values())
-		{
-			if (client.isPrayerActive(prayer))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
@@ -150,14 +137,10 @@ public class OneTickFlickPlugin extends Plugin
 		{
 			long elapsed = System.currentTimeMillis() - lastInteraction;
 			boolean timedOut = elapsed > config.overlayTimeoutSeconds() * 1000L;
-			boolean shouldTimeoutWhilePraying = config.overlayTimeoutOnPrayer();
+			boolean prayerActive = client.getServerVarbitValue(VarbitID.PRAYER_ALLACTIVE) != 0;
 
-			if (timedOut) {
-				if (shouldTimeoutWhilePraying) {
-					overlay.setVisible(false);
-				} else if (!isAnyPrayerActive()) {
-					overlay.setVisible(false);
-				}
+			if (timedOut && !prayerActive) {
+				overlay.setVisible(false);
 			}
 		}
 		else if (!config.enableTimeout() && !overlay.isVisible())
