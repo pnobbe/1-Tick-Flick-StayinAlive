@@ -75,6 +75,13 @@ public interface OneTickFlickConfig extends Config
 		return 30;
 	}
 
+	@ConfigItem(
+			keyName = "overlayTimeoutOnPrayer",
+			name = "Timeout while praying",
+			position = 5,
+			description = "Whether or not the overlay should timeout while you are praying")
+	default boolean overlayTimeoutOnPrayer() { return true; }
+
 	@Units(Units.MILLISECONDS)
 	@ConfigItem(
 			keyName = "clickDelayMilliseconds",

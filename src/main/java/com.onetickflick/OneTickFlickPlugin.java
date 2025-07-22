@@ -6,7 +6,9 @@ import javax.inject.Inject;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
+import net.runelite.api.Prayer;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.gameval.InterfaceID;
@@ -17,7 +19,6 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,9 +37,12 @@ public class OneTickFlickPlugin extends Plugin
 	private OneTickFlickOverlay overlay;
 	@Inject
 	private OneTickFlickConfig config;
+	@Inject
+	private Client client;
 
 	private long lastTickTime;
 	private long lastInteraction;
+	private boolean prayerActive;
 	private final List<Integer> currentTickClicks = new CopyOnWriteArrayList<>(); // A list of times the quick prayer orb was clicked, in milliseconds since the last onGameTick.
 	private final List<Integer> nextTickClicks = new CopyOnWriteArrayList<>(); // Only used if the click delay config option causes the click to fall into the next tick.
 
@@ -104,6 +108,18 @@ public class OneTickFlickPlugin extends Plugin
 		}
 	}
 
+	private boolean isAnyPrayerActive()
+	{
+		for (Prayer prayer : Prayer.values())
+		{
+			if (client.isPrayerActive(prayer))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
@@ -133,9 +149,15 @@ public class OneTickFlickPlugin extends Plugin
 		if (config.enableTimeout() && overlay.isVisible())
 		{
 			long elapsed = System.currentTimeMillis() - lastInteraction;
-			if (elapsed > config.overlayTimeoutSeconds() * 1000L)
-			{
-				overlay.setVisible(false);
+			boolean timedOut = elapsed > config.overlayTimeoutSeconds() * 1000L;
+			boolean shouldTimeoutWhilePraying = config.overlayTimeoutOnPrayer();
+
+			if (timedOut) {
+				if (shouldTimeoutWhilePraying) {
+					overlay.setVisible(false);
+				} else if (!isAnyPrayerActive()) {
+					overlay.setVisible(false);
+				}
 			}
 		}
 		else if (!config.enableTimeout() && !overlay.isVisible())
