@@ -6,10 +6,12 @@ import javax.inject.Inject;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -17,7 +19,6 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,6 +37,8 @@ public class OneTickFlickPlugin extends Plugin
 	private OneTickFlickOverlay overlay;
 	@Inject
 	private OneTickFlickConfig config;
+	@Inject
+	private Client client;
 
 	private long lastTickTime;
 	private long lastInteraction;
@@ -133,8 +136,10 @@ public class OneTickFlickPlugin extends Plugin
 		if (config.enableTimeout() && overlay.isVisible())
 		{
 			long elapsed = System.currentTimeMillis() - lastInteraction;
-			if (elapsed > config.overlayTimeoutSeconds() * 1000L)
-			{
+			boolean timedOut = elapsed > config.overlayTimeoutSeconds() * 1000L;
+			boolean prayerActive = client.getServerVarbitValue(VarbitID.PRAYER_ALLACTIVE) != 0;
+
+			if (timedOut && !prayerActive) {
 				overlay.setVisible(false);
 			}
 		}
