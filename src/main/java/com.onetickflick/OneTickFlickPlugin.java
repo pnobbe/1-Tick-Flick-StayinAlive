@@ -104,6 +104,9 @@ public class OneTickFlickPlugin extends Plugin
 			case "comboTextColor":
 				overlay.setComboTextColor(config.comboTextColor());
 				break;
+			case "swipeLineWidth":
+				overlay.setSwipeLineWidth(config.swipeLineWidth());
+				break;
 		}
 	}
 

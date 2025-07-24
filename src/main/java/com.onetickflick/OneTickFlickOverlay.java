@@ -40,6 +40,8 @@ public class OneTickFlickOverlay extends Overlay
 	private Color borderColor;
 	@Setter
 	private Color comboTextColor;
+	@Setter
+	private int swipeLineWidth;
 
 
 	@Inject
@@ -55,6 +57,7 @@ public class OneTickFlickOverlay extends Overlay
 		swipeLineColor = config.swipeLineColor();
 		borderColor = config.borderColor();
 		comboTextColor = config.comboTextColor();
+		swipeLineWidth = config.swipeLineWidth();
 
 		setPosition(OverlayPosition.BOTTOM_LEFT);
 		setPreferredSize(DEFAULT_SIZE);
@@ -114,10 +117,10 @@ public class OneTickFlickOverlay extends Overlay
 
 		long ms = plugin.millisSinceTick();
 		int swipeLineX = (int) (width * ms / (double) TICK_LENGTH);
-		swipeLineX = Math.min(swipeLineX, width); // Ensure the swipe line does not go out of the bar
+		swipeLineX = Math.min(swipeLineX, width - swipeLineWidth); // Ensure the swipe line does not go out of the bar
 
 		g.setColor(swipeLineColor);
-		g.drawLine(swipeLineX, 0, swipeLineX, barHeight);
+		g.fillRect(swipeLineX, 0, swipeLineWidth, barHeight);
 
 		g.setColor(borderColor);
 		g.drawRect(0, 0, width, barHeight);
