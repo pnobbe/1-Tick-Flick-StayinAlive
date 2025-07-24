@@ -113,10 +113,11 @@ public class OneTickFlickOverlay extends Overlay
 		g.fillRect(greenX1, 0, greenX2 - greenX1, barHeight);
 
 		long ms = plugin.millisSinceTick();
-		int barX = (int) (width * ms / (double) TICK_LENGTH);
+		int swipeLineX = (int) (width * ms / (double) TICK_LENGTH);
+		swipeLineX = Math.min(swipeLineX, width); // Ensure the swipe line does not go out of the bar
 
 		g.setColor(swipeLineColor);
-		g.drawLine(barX, 0, barX, barHeight);
+		g.drawLine(swipeLineX, 0, swipeLineX, barHeight);
 
 		g.setColor(borderColor);
 		g.drawRect(0, 0, width, barHeight);
