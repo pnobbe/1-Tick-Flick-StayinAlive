@@ -96,11 +96,22 @@ public interface OneTickFlickConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+			keyName = "timeoutWhilePrayerActive",
+			name = "Timeout while prayer active",
+			position = 1,
+			section = timeoutSection,
+			description = "Whether the overlay should timeout even while you are actively praying.")
+	default boolean timeoutWhilePrayerActive()
+	{
+		return false;
+	}
+
 	@Units(Units.SECONDS)
 	@ConfigItem(
 			keyName = "overlayTimeoutSeconds",
 			name = "Overlay timeout",
-			position = 1,
+			position = 2,
 			section = timeoutSection,
 			description = "How long after last clicking the quick prayer orb the overlay should remain visible")
 	@Range(min = 1, max = 600)

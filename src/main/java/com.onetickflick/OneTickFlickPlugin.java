@@ -142,7 +142,7 @@ public class OneTickFlickPlugin extends Plugin
 			boolean timedOut = elapsed > config.overlayTimeoutSeconds() * 1000L;
 			boolean prayerActive = client.getServerVarbitValue(VarbitID.PRAYER_ALLACTIVE) != 0;
 
-			if (timedOut && !prayerActive) {
+			if (timedOut && (config.timeoutWhilePrayerActive() || !prayerActive)) {
 				overlay.setVisible(false);
 			}
 		}

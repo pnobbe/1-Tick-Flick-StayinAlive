@@ -19,6 +19,7 @@ If you don't care about this, you can set the start to 0ms and the end to 600ms.
 - Set the green bar start and end to adjust the target zone
 - Adjust the width of the swipe line
 - Enable/disable the combo counter
-- Set a timeout for the overlay to hide after a certain amount of time
+- Set a timeout for the overlay to hide after a certain amount of time when not clicking prayers
+- Enable/disable timeout while prayers are active
 - Set a click delay to account for latency or server delay
 - Recolor all the overlay elements
