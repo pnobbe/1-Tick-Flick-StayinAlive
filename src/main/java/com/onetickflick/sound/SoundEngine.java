@@ -80,7 +80,6 @@ public class SoundEngine {
             playingAudio.mark(0);
             playingAudio.reset();
             playingAudio.close();
-            playingAudio.skip()
         } catch (IOException e) {
             log.warn("Failed to close One Tick sound stream", e);
         }
