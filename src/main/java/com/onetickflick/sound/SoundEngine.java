@@ -64,6 +64,7 @@ public class SoundEngine {
         float gain = 20f * (float) Math.log10(config.musicVolume() / 100f);
         try {
             playingAudio = SoundFileManager.getSoundStream(sound);
+            assert playingAudio != null;
             playingAudio.mark(0);
             audioPlayer.play(playingAudio, gain);
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
