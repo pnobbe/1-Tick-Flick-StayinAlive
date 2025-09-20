@@ -7,9 +7,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.Buffer;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +32,15 @@ public class SoundFileManager {
 
     public static File getSoundFile(Sound sound) {
         return DOWNLOAD_DIR.resolve(sound.getResourceName()).toFile();
+    }
+
+    public static BufferedInputStream getSoundStream(Sound sound) {
+        try {
+            return new BufferedInputStream(new FileInputStream((DOWNLOAD_DIR.resolve(sound.getResourceName()).toFile())));
+        } catch (FileNotFoundException e) {
+            System.out.println("Sound file not found: " + sound.getResourceName());
+            return null;
+        }
     }
 
     public static void prepareSoundFiles(OkHttpClient okHttpClient) {

@@ -200,8 +200,22 @@ public interface OneTickFlickConfig extends Config
 			section = colorSection,
 			position = 5
 	)
-	default Color comboTextColor()
-	{
-		return new Color(255, 255, 255, 255);
-	}
+	default Color comboTextColor() { return new Color(255, 255, 255, 255); }
+
+    @ConfigSection(
+            position = 6,
+            name = "Music",
+            description = "Control the music played during successful combos"
+    )
+    String musicSection = "musicSection";
+
+    @Alpha
+    @ConfigItem(
+        keyName = "muscVolume",
+        name = "Music Volume",
+        description = "Set the music volume to a specific level when starting the flick.",
+        section = musicSection,
+        position = 7
+    )
+    default int musicVolume() { return 20; }
 }

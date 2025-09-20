@@ -4,6 +4,9 @@ import com.google.inject.Provides;
 
 import javax.inject.Inject;
 
+import com.onetickflick.sound.Sound;
+import com.onetickflick.sound.SoundEngine;
+import com.onetickflick.sound.SoundFileManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.Client;
@@ -19,8 +22,11 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import okhttp3.OkHttpClient;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledExecutorService;
 
 @PluginDescriptor(
 		name = "1 Tick Flick (Stayin' Alive Edition)",
@@ -39,9 +45,19 @@ public class OneTickFlickPlugin extends Plugin
 	private OneTickFlickConfig config;
 	@Inject
 	private Client client;
+    @Inject
+    private OkHttpClient okHttpClient;
+
+
+    @Inject
+    private SoundEngine soundEngine;
+
+    @Inject
+    private ScheduledExecutorService executor;
 
 	private long lastTickTime;
 	private long lastInteraction;
+    private boolean soundPlaying = false;
 	private final List<Integer> currentTickClicks = new CopyOnWriteArrayList<>(); // A list of times the quick prayer orb was clicked, in milliseconds since the last onGameTick.
 	private final List<Integer> nextTickClicks = new CopyOnWriteArrayList<>(); // Only used if the click delay config option causes the click to fall into the next tick.
 
@@ -57,7 +73,9 @@ public class OneTickFlickPlugin extends Plugin
 
 		overlay.setVisible(true);
 		overlayManager.add(overlay);
-	}
+
+        executor.submit(() -> SoundFileManager.prepareSoundFiles(okHttpClient));
+    }
 
 	@Override
 	protected void shutDown()
@@ -125,6 +143,15 @@ public class OneTickFlickPlugin extends Plugin
         if (combo > 0)
         {
             System.out.printf("Combo! %d%n", combo);
+            if (!soundEngine.isPlayingAudio())
+            {
+                soundEngine.startStream(Sound.STAYIN_ALIVE, executor);
+            }
+        }
+        else {
+            if (soundEngine.isPlayingAudio()) {
+                soundEngine.stopStream(executor);
+            }
         }
 
 		currentTickClicks.clear();
