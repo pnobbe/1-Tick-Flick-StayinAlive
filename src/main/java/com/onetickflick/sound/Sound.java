@@ -3,7 +3,8 @@ package com.onetickflick.sound;
 import lombok.Getter;
 
 public enum Sound {
-    STAYIN_ALIVE("BeeGeesStayinAliveOSRS.wav");
+    STAYIN_ALIVE("BeeGeesStayinAliveOSRS.wav"),
+    SOUNDFONT("OSRS_Soundfont.sf2");
 
     @Getter
     private final String resourceName;

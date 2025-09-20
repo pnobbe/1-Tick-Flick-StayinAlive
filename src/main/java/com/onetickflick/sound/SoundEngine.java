@@ -64,9 +64,19 @@ public class SoundEngine {
         float gain = 20f * (float) Math.log10(config.musicVolume() / 100f);
         try {
             playingAudio = SoundFileManager.getSoundStream(sound);
-            assert playingAudio != null;
-            playingAudio.mark(0);
-            audioPlayer.play(playingAudio, gain);
+            if (playingAudio == null) {
+                return;
+            }
+            try {
+                playingAudio.mark(0);
+                playingAudio.reset();
+                audioPlayer.play(playingAudio, gain);
+
+            } catch (IOException e) {
+                log.warn("Failed to reset One Tick sound stream", e);
+                playingAudio.close();
+                playingAudio = null;
+            }
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             log.warn("Failed to load One Tick sound {}", sound, e);
             playingAudio = null;
