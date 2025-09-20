@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @PluginDescriptor(
-		name = "1 Tick Flick",
+		name = "1 Tick Flick (Stayin' Alive Edition)",
 		description = "Visual tick bar and combo counter for 1-tick prayer flicking with the quick prayer orb",
 		tags = {"1", "one", "tick", "flick", "prayer", "metronome", "visual", "quick", "orb"}
 )
@@ -121,6 +121,11 @@ public class OneTickFlickPlugin extends Plugin
 		{
 			combo = 0;
 		}
+
+        if (combo > 0)
+        {
+            System.out.printf("Combo! %d%n", combo);
+        }
 
 		currentTickClicks.clear();
 		overlay.newTick();
