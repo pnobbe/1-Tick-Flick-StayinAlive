@@ -2,8 +2,6 @@ package com.onetickflick.sound;
 
 import lombok.Getter;
 
-import java.util.Random;
-
 public enum Sound {
     STAYIN_ALIVE("BeeGeesStayinAliveOSRS.mid");
 

@@ -35,10 +35,10 @@ public class SoundFileManager {
         return DOWNLOAD_DIR.resolve(sound.getResourceName()).toFile();
     }
 
-    public static void prepareSoundFiles(OkHttpClient okHttpClient, boolean downloadStreamerTrolls) {
+    public static void prepareSoundFiles(OkHttpClient okHttpClient) {
         ensureDownloadDirectoryExists();
-        deleteUndesiredFilesIgnoringFolders(downloadStreamerTrolls);
-        downloadNotYetPresentSounds(okHttpClient, downloadStreamerTrolls);
+        deleteUndesiredFilesIgnoringFolders();
+        downloadNotYetPresentSounds(okHttpClient);
     }
 
     private static void ensureDownloadDirectoryExists() {
@@ -53,8 +53,8 @@ public class SoundFileManager {
         }
     }
 
-    private static void deleteUndesiredFilesIgnoringFolders(boolean keepStreamerTrolls) {
-        Set<String> desiredSoundFileNames = getDesiredSounds(keepStreamerTrolls)
+    private static void deleteUndesiredFilesIgnoringFolders() {
+        Set<String> desiredSoundFileNames = getDesiredSounds()
                 .map(Sound::getResourceName)
                 .collect(Collectors.toSet());
 
@@ -71,8 +71,8 @@ public class SoundFileManager {
         }
     }
 
-    private static void downloadNotYetPresentSounds(OkHttpClient okHttpClient, boolean downloadStreamerTrolls) {
-        getFilesToDownload(downloadStreamerTrolls)
+    private static void downloadNotYetPresentSounds(OkHttpClient okHttpClient) {
+        getFilesToDownload()
                 .forEach(filename -> downloadFilename(okHttpClient, filename));
     }
 
@@ -92,10 +92,10 @@ public class SoundFileManager {
         }
     }
 
-    private static Stream<String> getFilesToDownload(boolean downloadStreamerTrolls) {
+    private static Stream<String> getFilesToDownload() {
         Set<String> filesAlreadyPresent = getFilesPresent();
 
-        return getDesiredSounds(downloadStreamerTrolls)
+        return getDesiredSounds()
                 .map(Sound::getResourceName)
                 .filter(not(filesAlreadyPresent::contains));
     }
@@ -114,8 +114,7 @@ public class SoundFileManager {
         }
     }
 
-    private static Stream<Sound> getDesiredSounds(boolean includeStreamerTrolls) {
-        return Arrays.stream(Sound.values())
-                .filter(sound -> includeStreamerTrolls || !sound.isStreamerTroll());
+    private static Stream<Sound> getDesiredSounds() {
+        return Arrays.stream(Sound.values());
     }
 }
